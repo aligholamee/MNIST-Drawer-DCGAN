@@ -22,3 +22,8 @@ tf.reset_default_graph()
 BATCH_SIZE = 64     # TRAINING BATCH SIZE
 N_NOISE = 64        # NUMBER OF NOISE INPUTS
 
+# Placeholders definitions
+X_INPUT = tf.placeholder(dtype=tf.float32, shape=[None, 28, 28], name="X_INPUT")
+NOISE_INPUT = tf.placeholder(dtype=tf.float32, shape=[None, N_NOISE], name="NOISE_INPUT")
+KEEP_PROB = tf.placeholder(dtype=tf.float32, name="KEEP_PROB")
+IS_TRAINING = tf.placeholder(dtype=tf.bool, name="IS_TRAINING")
