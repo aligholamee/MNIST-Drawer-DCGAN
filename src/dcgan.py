@@ -27,3 +27,10 @@ X_INPUT = tf.placeholder(dtype=tf.float32, shape=[None, 28, 28], name="X_INPUT")
 NOISE_INPUT = tf.placeholder(dtype=tf.float32, shape=[None, N_NOISE], name="NOISE_INPUT")
 KEEP_PROB = tf.placeholder(dtype=tf.float32, name="KEEP_PROB")
 IS_TRAINING = tf.placeholder(dtype=tf.bool, name="IS_TRAINING")
+
+# Binary cross entropy calculator
+def binary_cross_entropy(x, z):
+    eps = 1e - 12   # A very small number as epsilon
+    return (-(x*tf.log(z+eps) + (1. - x)*tf.log(1. - z + eps)))
+    
+
