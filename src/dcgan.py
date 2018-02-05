@@ -59,11 +59,35 @@ def discriminator(input_img, reuse=None, keep_prob=KEEP_PROB):
         cg = tf.contrib.layers.flatten(cg)
 
         # Wrap everything in a densly-connected layer
-        cg = tf.layers.dense(cg, units=128, activation=tf.nn.leaky_relu)
-        cg = tf.layers.dense(cg, units=1, activation=tf.nn.sigmoid)
+        cg = tf.layers.dense(cg, units=128, activation=tf.nn.leaky_relu, name="dense_1")
+        cg = tf.layers.dense(cg, units=1, activation=tf.nn.sigmoid, name="dense_2")
 
         # Return the computational graph for the discriminator
         return cg
+
+# Generator computational graph generator
+def generator(latent_z, keep_prob=KEEP_PROB, is_training=IS_TRAINING):
+    
+    # momentum rate
+    momentum = 0.99
+
+    # The variable name scope
+    with tf.variable_scope("generator", reuse=None):
+        x = latent_z
+        d1 = 4
+        d2 = 1
+
+        # Dense Layer 1
+        x = tf.layers.dense(x, units=d1*d1*d2, activation=tf.nn.leaky_relu, name="dense_3")
+        # Dropout 1
+        x = tf.nn.dropout(x, keep_prob, name="D_4")
+        # Batch_norm 1
+        x = tf.contrib.layers.batch_norm(x, is_training=is_training, decay=momentum)
+
+        # Reshape the 
+
+
+        
 
 
 
