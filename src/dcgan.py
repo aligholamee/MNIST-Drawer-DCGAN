@@ -74,22 +74,23 @@ def generator(latent_z, keep_prob=KEEP_PROB, is_training=IS_TRAINING):
     # The variable name scope
     with tf.variable_scope("generator", reuse=None):
         x = latent_z
-        d1 = 4
-        d2 = 1
+
+        WIDTH_HEIGHT = 4     # Width and Height
+        NUM_CHANNELS = 1      # Number of image channels
 
         # Dense Layer 1
-        x = tf.layers.dense(x, units=d1*d1*d2, activation=tf.nn.leaky_relu, name="dense_3")
+        x = tf.layers.dense(x, units=WIDTH_HEIGHT*WIDTH_HEIGHT*NUM_CHANNELS, activation=tf.nn.leaky_relu, name="dense_3")
         # Dropout 1
-        x = tf.nn.dropout(x, keep_prob, name="D_4")
+        x = tf.layers.dropout(x, keep_prob, name="D_4")
         # Batch_norm 1
         x = tf.contrib.layers.batch_norm(x, is_training=is_training, decay=momentum)
 
-        # Reshape the 
+        # Reshape the generated picture
+        x = tf.reshape(x, shape=[-1, WIDTH_HEIGHT, WIDTH_HEIGHT, NUM_CHANNELS])
 
-
+        # Resize the generated picture
+        x = tf.image.resize_images(x, size=[7, 7])
         
-
-
 
 
 
