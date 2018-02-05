@@ -11,6 +11,7 @@
 """
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
+import sys
 
 # Load the dataset
 mnist = input_data.read_data_sets('MNIST_data')
@@ -30,7 +31,7 @@ IS_TRAINING = tf.placeholder(dtype=tf.bool, name="IS_TRAINING")
 
 # Binary cross entropy calculator
 def binary_cross_entropy(x, z):
-    eps = 1e - 12   # A very small number as epsilon
+    eps = sys.float_info.epsilon   # A very small number as epsilon
     return (-(x*tf.log(z+eps) + (1. - x)*tf.log(1. - z + eps)))
     
 # Discriminator computational graph generator
