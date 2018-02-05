@@ -91,6 +91,16 @@ def generator(latent_z, keep_prob=KEEP_PROB, is_training=IS_TRAINING):
         # Resize the generated picture
         x = tf.image.resize_images(x, size=[7, 7])
         
+        # CNN_T Layer 1
+        x = tf.layers.conv2d_transpose(x, kernel_size=5, filters=64, strides=2, padding='same', activation=tf.nn.leaky_relu, name="CNN_4")
+        # Dropout 2
+        x = tf.layers.dropout(x, keep_prob, name="D_5")
+        # Batch_norm 2
+        x = tf.contrib.layers.batch_norm(x, is_training=is_training, decay=momentum)
 
-
-
+        # CNN_T Layer 2
+        x = tf.layers.conv2d_transpose(x, kernel_size=5, filters=64, strides=2, padding='same', activation=tf.nn.leaky_relu, name="CNN_5")
+        # Dropout 3
+        x = tf.layers.dropout(x, keep_prob, name="D_6")
+        # Batch_norm 3
+        x = tf.contrib.layers.batch_norm(x, is_training=is_training, decay=momentum)
