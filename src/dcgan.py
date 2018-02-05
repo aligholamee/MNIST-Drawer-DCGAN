@@ -44,16 +44,16 @@ def discriminator(input_img, reuse=None, keep_prob=KEEP_PROB):
         cg = tf.reshape(input_img, shape=[-1, 28, 28, 1])
 
         # First CNN Layer + Dropout
-        cg = tf.nn.conv2d(cg, filters=64, kernel_size=5, strides=2, padding='same', activation=tf.nn.leaky_relu, use_cudnn_on_gpu=True, name="CNN_1")
-        cg = tf.nn.dropout(cg, keep_prob, name="D_1")
+        cg = tf.layers.conv2d(cg, kernel_size=5, filters=64, strides=2, padding='same', activation=tf.nn.leaky_relu, name="CNN_1")
+        cg = tf.layers.dropout(cg, keep_prob, name="D_1")
 
         # Second CNN Layer + Dropout
-        cg = tf.nn.conv2d(cg, filters=64, kernel_size=5, strides=2, padding='same', activation=tf.nn.leaky_relu, use_cudnn_on_gpu=True, name="CNN_2")
-        cg = tf.nn.dropout(cg, keep_prob, name="D_2")
+        cg = tf.layers.conv2d(cg, kernel_size=5, filters=64, strides=2, padding='same', activation=tf.nn.leaky_relu, name="CNN_2")
+        cg = tf.layers.dropout(cg, keep_prob, name="D_2")
 
         # Third CNN Layer + Dropout
-        cg = tf.nn.conv2d(cg, filters=64, kernel_size=5, strides=1, padding='same', activation=tf.nn.leaky_relu, use_cudnn_on_gpu=True, name="CNN_3")
-        cg = tf.nn.dropout(cg, keep_prob, name="D_3")
+        cg = tf.layers.conv2d(cg, kernel_size=5, filters=64, strides=1, padding='same', activation=tf.nn.leaky_relu, name="CNN_3")
+        cg = tf.layers.dropout(cg, keep_prob, name="D_3")
 
         # Flatten the cg 
         cg = tf.contrib.layers.flatten(cg)
