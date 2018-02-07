@@ -104,3 +104,16 @@ def generator(latent_z, keep_prob=KEEP_PROB, is_training=IS_TRAINING):
         x = tf.layers.dropout(x, keep_prob, name="D_6")
         # Batch_norm 3
         x = tf.contrib.layers.batch_norm(x, is_training=is_training, decay=momentum)
+
+        # CNN_T Layer 3
+        x = tf.layers.conv2d_transpose(x, kernel_size=5, filters=64, strides=1, padding='same', activation=tf.nn.leaky_relu, name="CNN_6")
+        x = tf.layers.dropout(x, keep_prob)
+
+        # Batch_norm 4
+        x = tf.contrib.layers.batch_norm(x, is_training=is_training, decay=momentum)
+
+        # CNN_T Layer 4
+        x = tf.layers.conv2d_transpose(x, kernel_size=5, filters=1, strides=1, padding='same', activation=tf.nn.sigmoid, name="CNN_7")
+    
+        return x
+        
