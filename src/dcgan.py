@@ -117,3 +117,27 @@ def generator(latent_z, keep_prob=KEEP_PROB, is_training=IS_TRAINING):
     
         return x
         
+G = generator(NOISE_INPUT, KEEP_PROB, IS_TRAINING)
+D_REAL = discriminator(X_INPUT)
+D_FAKE = discriminator(G, reuse=True)
+
+VARS_G = [var for var in tf.trainable_variables() if var.name.startswith("generator")]
+VARS_D = [var for var in tf.trainable_variables() if var.name.startswith("discriminator")]
+
+
+D_REG = tf.contrib.layers.apply_regularization(tf.contrib.layers.l2_regularizer(1e-6), VARS_D)
+G_REG = tf.contrib.layers.apply_regularization(tf.contrib.layers.l2_regularizer(1e-6), VARS_G)
+
+LOSS_D_REAL = binary_cross_entropy(tf.ones_like(D_REAL), D_REAL)
+LOSS_D_FAKE = binary_cross_entropy(tf.zeros_like(D_FAKE), D_FAKE)
+LOSS_G = tf.reduce_mean(binary_cross_entropy(tf.ones_like(D_FAKE), D_FAKE))
+LOSS_D = tf.reduce_mean(0.5 * (LOSS_D_REAL + LOSS_D_FAKE))
+
+update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
+with tf.control_dependencies(update_ops):
+    optimizer_d = tf.train.RMSPropOptimizer(learning_rate=0.00015).minimize(LOSS_D + D_REG, var_list=VARS_D)
+    optimizer_g = tf.train.RMSPropOptimizer(learning_rate=0.00015).minimize(LOSS_G + G_REG, var_list=VARS_G)
+    
+    
+SESS = tf.Session()
+SESS.run(tf.global_variables_initializer())
