@@ -12,6 +12,7 @@
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 import sys
+import numpy as np
 
 # Load the dataset
 mnist = input_data.read_data_sets('MNIST_data')
@@ -141,3 +142,33 @@ with tf.control_dependencies(update_ops):
     
 SESS = tf.Session()
 SESS.run(tf.global_variables_initializer())
+
+for i in range(60000):
+    train_d = True
+    train_g = True
+    keep_prob_train = 0.6 # 0.5
+    
+    
+    n = np.random.uniform(0.0, 1.0, [BATCH_SIZE, N_NOISE]).astype(np.float32)   
+    batch = [np.reshape(b, [28, 28]) for b in mnist.train.next_batch(batch_size=BATCH_SIZE)[0]]  
+    
+    d_real_ls, d_fake_ls, g_ls, d_ls = SESS.run([LOSS_D_REAL, LOSS_D_FAKE, LOSS_G, LOSS_D], feed_dict={X_INPUT: batch, NOISE_INPUT: n, KEEP_PROB: keep_prob_train, IS_TRAINING:True})
+    
+    d_real_ls = np.mean(d_real_ls)
+    d_fake_ls = np.mean(d_fake_ls)
+    g_ls = g_ls
+    d_ls = d_ls
+    
+    if g_ls * 1.5 < d_ls:
+        train_g = False
+        pass
+    if d_ls * 2 < g_ls:
+        train_d = False
+        pass
+    
+    if train_d:
+        SESS.run(optimizer_d, feed_dict={NOISE_INPUT: n, X_INPUT: batch, KEEP_PROB: keep_prob_train, IS_TRAINING:True})
+        
+        
+    if train_g:
+        SESS.run(optimizer_g, feed_dict={NOISE_INPUT: n, KEEP_PROB: keep_prob_train, IS_TRAINING:True})
